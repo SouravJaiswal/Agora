@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: Agora
+        psr4_prefix: Agora
+        src_path: app

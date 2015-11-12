@@ -77,3 +77,16 @@ Route::get('/friends',[
 	'uses' => 'FriendController@index',
 	'middleware' =>['auth'],
 ]);
+
+
+Route::get('/friends/add/{username}',[
+	'as' => 'friend.add',
+	'uses' => 'FriendController@getAdd',
+	'middleware' =>['auth'],
+]);
+
+Route::get('/friends/accept/{username}',[
+	'as' => 'friend.accept',
+	'uses' => 'FriendController@getAccept',
+	'middleware' =>['auth'],
+]);

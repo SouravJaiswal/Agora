@@ -27,7 +27,7 @@
       @endif
       <ul class="nav navbar-nav navbar-right">
       @if (Auth::check())
-        <li><a href="{{ route('profile.index', ['username' =>Auth::user()->username]) }}">{{ Auth::user()->getName() }}</a></li>
+        <li><a href="{{ route('profile.index', ['username' =>Auth::user()->username]) }}">{{ Auth::user()->getNameorUsername() }}</a></li>
         <li><a href="{{route('profile.edit')}}">Update Profile</a></li>
         <li><a href="{{ route('auth.signout') }}">Sign Out</a></li>
       @else

@@ -82,6 +82,10 @@ class User extends Model implements AuthenticatableContract
         return (bool) $this->friendRequestsPending()->where('id',$user->id)->count();
     }
 
+    public function hasFriendRequestRecieved(User $user){
+        return (bool) $this->friendsRequest()->where('id',$user->id)->count();
+    }
+
     public function addFriend(User $user){
         $this->friendsOf()->attach($user->id);
     }
@@ -93,6 +97,8 @@ class User extends Model implements AuthenticatableContract
     }
 
     public function isFriendsWith(User $user){
-        return (bool)$this->friends()->where('id',$user_id)->count();
+        return (bool)$this->friends()->where('id',$user->id)->count();
     }
+
+
 }

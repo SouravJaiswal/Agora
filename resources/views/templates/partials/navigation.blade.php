@@ -15,8 +15,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
       @if (Auth::check())
-        <li><a href="#">Timeline</a></li>
-        <li><a href="#">Friends</a></li>
+        <li><a href="{{    route('home')    }}">Timeline</a></li>
+        <li><a href="{{ route('friend.index') }}">Friends</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search" method="get" action="{{ route('search.results') }}">
         <div class="form-group">
@@ -27,8 +27,8 @@
       @endif
       <ul class="nav navbar-nav navbar-right">
       @if (Auth::check())
-        <li><a href="#">{{ Auth::user()->getName() }}</a></li>
-        <li><a href="#">Update Profile</a></li>
+        <li><a href="{{ route('profile.index', ['username' =>Auth::user()->username]) }}">{{ Auth::user()->getName() }}</a></li>
+        <li><a href="{{route('profile.edit')}}">Update Profile</a></li>
         <li><a href="{{ route('auth.signout') }}">Sign Out</a></li>
       @else
         <li><a href="{{ route('auth.signup') }}">Sign Up</a></li>

@@ -15,7 +15,7 @@
 
 		@foreach ($users as $user)
 
-			@include('user/partials/userblock')
+			@include('user/partials/userblock')	
 
 		@endforeach
 

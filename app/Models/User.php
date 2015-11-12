@@ -52,4 +52,47 @@ class User extends Model implements AuthenticatableContract
     public function getFirstNameOrUserName(){
         return $this->first_name ?: $this->username;
     }
+
+    public function getAvatar(){
+        return 'http://www.gravatar.com/avatar/{{md5($this->email)}}?d=mm&s=40';
+    }
+
+    public function friendsOfMine(){
+        return $this->belongsToMany('Agora\Models\User','friends','user_id','friend_id');
+    }
+
+    public function friendsOf(){
+        return $this->belongsToMany('Agora\Models\User','friends','friend_id','user_id');
+    }
+
+    public function friends(){
+        return $this->friendsOfMine()->wherePivot('accepted',true)
+                    ->get()->merge($this->friendsOf()->wherePivot('accepted',true)->get());
+    }
+
+    public function friendsRequest(){
+        return $this->friendsOfMine()->wherePivot('accepted',false)->get();
+    }
+
+    public function friendRequestsPending(){
+        return $this->friendsOf()->wherePivot('accepted',false)->get();
+    }
+
+    public function hasFriendRequestPending(User $user){
+        return (bool) $this->friendRequestsPending()->where('id',$user->id)->count();
+    }
+
+    public function addFriend(User $user){
+        $this->friendsOf()->attach($user->id);
+    }
+
+    public function acceptFriendRequest(User $user){
+        $this->friendsRequest()->where('id',$user->id)->first()->pivot->update([
+            'accepted' => true,
+        ]);
+    }
+
+    public function isFriendsWith(User $user){
+        return (bool)$this->friends()->where('id',$user_id)->count();
+    }
 }

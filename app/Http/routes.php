@@ -47,3 +47,33 @@ Route::get('/search',[
 	'as' => 'search.results',
 	'uses' => 'SearchController@getSearchResults'
 ]);
+
+
+/***Profile****/
+
+Route::get('/user/{username}',[
+	'as' => 'profile.index',
+	'uses' => 'ProfileController@getProfile'
+]);
+
+
+Route::get('/profile/edit',[
+	'as' => 'profile.edit',
+	'uses' => 'ProfileController@getEdit',
+	'middleware' =>['auth'],
+]);
+
+Route::post('/profile/edit',[
+	'uses' => 'ProfileController@postEdit',
+	'middleware' =>['auth'],
+]);
+
+
+
+/****Friends****/
+
+Route::get('/friends',[
+	'as' => 'friend.index',
+	'uses' => 'FriendController@index',
+	'middleware' =>['auth'],
+]);

@@ -35,31 +35,43 @@
         <p>{{$status->body}}</p>
         <ul class="list-inline">
             <li>{{$status->created_at->diffForHumans()}}</li>
-            <li><a href="#">Like</a></li>
-            <li>10 likes</li>
+            @if (($status->user->id !== Auth::user()->id) and !Auth::user()->hasLikedStatus($status))
+                <li><a href="{{route('status.like',['statusId'=>$status->id])}}">Like</a></li>
+            @endif
+                <li>{{$status->likes->count()}} {{str_plural('like',$status->likes->count())}}</li>
         </ul>
 
 
-        <!---
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object" alt="" src="">
-            </a>
-            <div class="media-body">
-                <h5 class="media-heading"><a href="#">Billy</a></h5>
-                <p>Yes, it is lovely!</p>
-                <ul class="list-inline">
-                    <li>8 minutes ago.</li>
-                    <li><a href="#">Like</a></li>
-                    <li>4 likes</li>
-                </ul>
+        @foreach($status->replies as $reply)
+	       <div class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object" alt="{{$reply->user->getNameorUsername()}}" src="{{ $reply->user->getAvatar()}}">
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading"><a href="{{route('profile.index',['username'=>$reply->user->username])}}">{{$reply->user->getFirstNameorUsername()}}</a></h4>
+        <p>{{$reply->body}}</p>
+        <ul class="list-inline">
+            <li>{{$reply->created_at->diffForHumans()}}</li>
+            @if ($reply->user->id !== Auth::user()->id && !Auth::user()->hasLikedStatus($reply) )
+                <li><a href="{{route('status.like',['statusId'=>$reply->id])}}">Like</a></li>
+            @endif  
+                <li>{{$reply->likes->count()}} {{str_plural('like',$reply->likes->count())}}</li>
+
+            
+    </ul>
+    </div>
+    </div>
+		@endforeach	
+        <form role="form" action="{{route('status.reply',['status-id'=>$status->id])}}" method="post">
+            <div class="form-group {{  $errors->has("reply-{$status->id}") ? 'has-error' : '' }}">
+                <textarea name="reply-{{$status->id}}" class="form-control" rows="2" placeholder="Reply to this status"></textarea>
+            	@if($errors->has("reply-{$status->id}"))
+					<span class="help-block">
+						{{ $errors->first("reply-{$status->id}") }}
+					</span>
+			    @endif
             </div>
-        </div>
-		-->
-        <form role="form" action="#" method="post">
-            <div class="form-group">
-                <textarea name="reply-1" class="form-control" rows="2" placeholder="Reply to this status"></textarea>
-            </div>
+             <input type="hidden" name="_token" value="{{ Session::token() }}">
             <input type="submit" value="Reply" class="btn btn-default btn-sm">
         </form>
     </div>

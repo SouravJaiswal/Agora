@@ -61,6 +61,10 @@ class User extends Model implements AuthenticatableContract
         return $this->hasMany('Agora\Models\Status','user_id');
     }
 
+    public function likes(){
+        return $this->hasMany('Agora\Models\Like','user_id');
+    }
+
     public function friendsOfMine(){
         return $this->belongsToMany('Agora\Models\User','friends','user_id','friend_id');
     }
@@ -94,6 +98,10 @@ class User extends Model implements AuthenticatableContract
         $this->friendsOf()->attach($user->id);
     }
 
+    public function deleteFriend(User $user){
+        $this->friendsOfMine()->detach($user->id);
+    }
+
     public function acceptFriendRequest(User $user){
         $this->friendsRequest()->where('id',$user->id)->first()->pivot->update([
             'accepted' => true,
@@ -104,5 +112,7 @@ class User extends Model implements AuthenticatableContract
         return (bool)$this->friends()->where('id',$user->id)->count();
     }
 
-
+    public function hasLikedStatus(Status $status){
+        return (bool)$status->likes->where('user_id',$this->id)->count();
+    }
 }

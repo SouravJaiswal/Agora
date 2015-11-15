@@ -91,11 +91,30 @@ Route::get('/friends/accept/{username}',[
 	'middleware' =>['auth'],
 ]);
 
+Route::post('/friends/delete/{username}',[
+	'as' => 'friend.delete',
+	'uses' => 'FriendController@postDelete',
+	'middleware' =>['auth'],
+]);
+
 
 /*****Status*********/
 
 Route::post('/status',[
 	'as' => 'status.post',
 	'uses' => 'StatusController@postUpdate',
+	'middleware' =>['auth'],
+]);
+
+
+Route::post('/status/{statusId}/reply',[
+	'as' => 'status.reply',
+	'uses' => 'StatusController@postReply',
+	'middleware' =>['auth'],
+]);
+
+Route::get('/status/{statusId}/like',[
+	'as' => 'status.like',
+	'uses' => 'StatusController@getLike',
 	'middleware' =>['auth'],
 ]);

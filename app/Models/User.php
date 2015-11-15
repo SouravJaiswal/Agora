@@ -57,6 +57,10 @@ class User extends Model implements AuthenticatableContract
         return 'http://www.gravatar.com/avatar/{{md5($this->email)}}?d=mm&s=40';
     }
 
+    public function statuses(){
+        return $this->hasMany('Agora\Models\Status','user_id');
+    }
+
     public function friendsOfMine(){
         return $this->belongsToMany('Agora\Models\User','friends','user_id','friend_id');
     }
